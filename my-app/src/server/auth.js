@@ -10,7 +10,7 @@ const validateAndAuthenticateUser = async (req, res, next) => {
     
     const client = await pool.connect();
     const result = await client.query(`
-      SELECT * FROM App_user WHERE id = $1 and hashed_password = $2
+      SELECT * FROM user_password WHERE id = $1 and hashed_password = $2
     `, [username,password]);
     client.release();
     if (result.rowCount === 0) {

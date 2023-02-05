@@ -140,19 +140,26 @@ async function  delete_course(course_id){
             <p>{studentInfo.tot_cred}</p>
 
           <p>Course details</p> 
-            <div>
-                
-                <ul>
-                    {Object.values(courses).map(item => (<li>{item.course_id} {item.title} {item.credits}   <button onClick={()=> delete_course(item.course_id)}>Drop</button></li>))}
-                </ul>
-            </div>
-            <p>Previous Course details</p> 
-            <div>
-                
-                <ul>
-                    {Object.values(prevcourses).map(item => (<li>{item.course_id} {item.title} {item.credits} {item.grade}</li>))}
-                </ul>
-            </div>
+
+          {Object.keys(courses).length ?  (
+               <ul>
+               {Object.values(courses).map(item => (<li>{item.course_id} {item.sec_id} {item.title} {item.credits}   <button onClick={()=> delete_course(item.course_id)}>Drop</button></li>))}
+           </ul>
+                  ) : (
+                    <p> No course detail available</p>
+                  )}
+             <p>Previous Course details</p>
+            {Object.keys(prevcourses).length ? (
+             <ul>
+             {Object.values(prevcourses).map(item => (<li>{item.course_id} {item.title} {item.credits} {item.grade}</li>))}
+         </ul>
+              ) : (
+                ( <p> No course detail available</p>))
+               } 
+            
+            
+            
+           
         </div>
       ) : (
         window.location.href='/'

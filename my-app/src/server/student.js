@@ -25,12 +25,19 @@ const getStudentInfo = async (req, res) => {
       
   
       const id=req
-      let year=new Date().getFullYear();
-      year-=14
+      // let year=new Date().getFullYear();
+      // year-=14
+      let date = new Date();
+      date.setFullYear(date.getFullYear()-13)
+      let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
+      console.log(timestamp);
+
       //console.log(year)
       const client = await pool.connect();
       const result = await client.query(`
-        SELECT takes.course_id,course.title,course.credits FROM takes,course WHERE id = \'${id}\' and  takes.course_id=course.course_id and year= \'${year}\'
+        SELECT takes.course_id,takes.sec_id,course.title,course.credits,takes.semester FROM takes,course,(
+          select * from reg_dates  where start_time <= \'${timestamp}\' order by start_time desc limit 1) as sem
+         WHERE id = \'${id}\' and  takes.course_id=course.course_id and takes.semester= sem.semester and takes.year=sem.year
       `);
       client.release();
       //console.log(result.rows)
@@ -46,12 +53,15 @@ const getStudentInfo = async (req, res) => {
       
   
       const id=req
-      let year=new Date().getFullYear();
-      year-=14
+      
+
+      let date = new Date();
+      date.setFullYear(date.getFullYear()-13)
+      let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
       //console.log(year)
       const client = await pool.connect();
       const result = await client.query(`
-        SELECT takes.course_id,course.title,course.credits,takes.grade FROM takes,course WHERE id = \'${id}\' and  takes.course_id=course.course_id and year!= \'${year}\' order by year desc
+      select takes.* from takes where ID=\'${id}\' and((year <\'${date.getFullYear()}\') or (year =  \'${date.getFullYear()}\' and  (case semester when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)<(case (select semester from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1)   when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)))  order by year desc ;
       `);
       client.release();
       //console.log(result.rows)
@@ -71,9 +81,9 @@ const getStudentInfo = async (req, res) => {
         //   const id=req.id
         //   const course_id=req.course_id
         
-          console.log(id,course_id)
+          //console.log(id,course_id)
           let year=new Date().getFullYear();
-          year-=14
+          year-=13
           //console.log(year)
           const client = await pool.connect();
           const result = await client.query(`
