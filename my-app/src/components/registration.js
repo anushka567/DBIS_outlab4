@@ -7,7 +7,7 @@ const Registration = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/current_courses')
+    fetch('http://localhost:3001/current_courses')
       .then((response) => response.json())
       .then((data) => {
         setCourseIds(data.map((course) => course.course_id));

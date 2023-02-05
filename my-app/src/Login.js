@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 const Login = ({handleLogin}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +12,7 @@ const Login = ({handleLogin}) => {
     // localStorage.setItem('luser',user) 
     
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -34,26 +33,47 @@ const Login = ({handleLogin}) => {
   };
 
   return (
-    <div class="login-form" >
+    <div>
+      <div class="justify-content-center align-items-sm-right text-light bg-dark">
+        <h1 class="font-monospace ">ASC</h1></div>
+      <div class="d-flex flex-row  justify-content-center align-items-sm-around" id="login-div" >
+      <div class="p-2">
+        
+        <img src={process.env.PUBLIC_URL + '/login-logo.png'} alt='logo' width="200"/>
+
+       
+      </div>
+      <div class="form-group  d-flex p-2 justify-content-center"  >
     <form onSubmit={handleSubmit}>
+      <label for ="first">User ID</label>
       <input
+      class="form-control"
         type="text"
+        id="first"
         value={username}
         onChange={event => setUsername(event.target.value)}
-        placeholder="Username"
+        placeholder="ID"
       />
-      <br></br>
+      <label for ="second">Password</label>
       <input
+      class="form-control"
         type="password"
+        id="second"
         value={password}
         onChange={event => setPassword(event.target.value)}
         placeholder="Password"
       />
       <br></br>
-      <button type="submit">Login</button>
+      <button type="submit" class="btn btn-success">Login</button>
       {error && <div>{error}</div>}
     </form>
     </div>
+  
+  
+</div>
+    </div>
+    
+
   );
 };
 

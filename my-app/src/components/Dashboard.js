@@ -1,19 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const valid=sessionStorage.getItem('valid')
+  //const valid=sessionStorage.getItem('valid')
   return (
+    
+  
 
-    <div>
-      {valid ? (
-        <div>
-          <h1>This is the dashboard</h1>
+      <div id="dash">
          
-        </div>
-      ) : (
-        window.location.href='/'
-      )}
-    </div>
+      
+
+        <Link to="/login">Go to Login</Link>
+      </div>
+       
   );
 };
 

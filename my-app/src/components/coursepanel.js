@@ -11,7 +11,7 @@ const CoursePanel =({course_id})=> {
         //console.log(course_id)
         try {          
            
-            const response = await fetch(`http://localhost:3000/registercourse/${id}/${course_id}/${sec_id}`,{
+            const response = await fetch(`http://localhost:3001/registercourse/${id}/${course_id}/${sec_id}`,{
               method: 'PUT',     
             });
             
@@ -39,7 +39,7 @@ const CoursePanel =({course_id})=> {
       try {
           
    
-          const response = await fetch(`http://localhost:3000/courseExtraInfo/${course_id}`,{
+          const response = await fetch(`http://localhost:3001/courseExtraInfo/${course_id}`,{
             method: 'GET',     
           });
           

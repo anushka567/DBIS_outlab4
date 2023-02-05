@@ -23,6 +23,7 @@ const App = () => {
   return (
     <BrowserRouter>
     <Routes>
+      <Route path="/" element ={<Dashboard /> }/>
       <Route path="/login"  element={<Login handleLogin={handleLogin}/>} />
       <Route path="/home"  element={<Home username={user} />}/>
       <Route path="/home/registration"  element={<Registration />}/>

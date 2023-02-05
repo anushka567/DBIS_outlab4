@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-
+import React, {  useEffect, useState } from 'react';
+import {Card ,Row,Col,Button,Table} from 'react-bootstrap';
 const Home = () => {
 
 
@@ -20,7 +20,7 @@ const Home = () => {
         
        
        
-        const response = await fetch(`http://localhost:3000/studentinfo/${id}`,{
+        const response = await fetch(`http://localhost:3001/studentinfo/${id}`,{
           method: 'GET',     
         });
         console.log("what")
@@ -49,7 +49,7 @@ useEffect(()=>{
         
        
        
-        const response = await fetch(`http://localhost:3000/studentcourseinfo/${id}`,{
+        const response = await fetch(`http://localhost:3001/studentcourseinfo/${id}`,{
           method: 'GET',     
         });
         //onsole.log("what")
@@ -76,7 +76,7 @@ useEffect(()=>{
         
        
        
-        const response = await fetch(`http://localhost:3000/studentprevcourseinfo/${id}`,{
+        const response = await fetch(`http://localhost:3001/studentprevcourseinfo/${id}`,{
           method: 'GET',     
         });
         //onsole.log("what")
@@ -103,7 +103,7 @@ async function  delete_course(course_id){
         
        
        
-        const response = await fetch(`http://localhost:3000/deletecourse/${id}/${course_id}`,{
+        const response = await fetch(`http://localhost:3001/deletecourse/${id}/${course_id}`,{
           method: 'DELETE',     
         });
         console.log("hahahah")
@@ -130,32 +130,117 @@ async function  delete_course(course_id){
 }
 
   return (
-    <div>
+
+    <div class="justify-content-center" id="home-body">
+
       { valid ? (
-        <div>
-          <h1>Welcome, {user} !</h1>
-          <p>Details:</p>
-            <p> {studentInfo.name}</p>
-            <p>{studentInfo.dept_name}</p>
-            <p>{studentInfo.tot_cred}</p>
+       
 
-          <p>Course details</p> 
 
-          {Object.keys(courses).length ?  (
-               <ul>
-               {Object.values(courses).map(item => (<li>{item.course_id} {item.sec_id} {item.title} {item.credits}   <button onClick={()=> delete_course(item.course_id)}>Drop</button></li>))}
-           </ul>
-                  ) : (
-                    <p> No course detail available</p>
-                  )}
-             <p>Previous Course details</p>
+        
+        
+
+
+        <div >
+ 
+  
+  
+
+
+      
+
+      <Table striped bordered hover variant="dark">
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>{user}</th>
+          <th>Name</th>
+          <th>{studentInfo.name}</th>
+          <th>Department</th>
+          <th>{studentInfo.dept_name}</th>
+          <th>Total Credits</th>
+          <th>{studentInfo.tot_cred}</th>
+          
+        </tr>
+      </thead>
+      
+    </Table>
+            
+           
+            
+
+          <h5>Current Courses Undertaken</h5> 
+        <div class="mx-md-n5" id="home-course">
+          {Object.keys(courses).length ? (
+              <Row>
+            {Object.values(courses).map(item => (
+               <Col xs={6} md={3} key={item.course_id}>
+            <Card>
+            <Card.Img variant="top" src={process.env.PUBLIC_URL + '/book-logo.png'} />
+              <Card.Body>
+              <div
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    background: 'rgba(255, 255, 0, 0.8)',
+                    padding: '5px',
+                    borderRadius: '2px',
+                  }}
+                >
+                  <Card.Text>Credits:{item.credits} </Card.Text>
+                </div>
+               
+                <Card.Title>{item.course_id}  S{item.sec_id}  </Card.Title>
+
+                <Card.Text> {item.title} </Card.Text>
+                <Button variant="danger float-right"  onClick={()=> delete_course(item.course_id)}>Drop</Button>
+               
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+             ):(<p> No course detail available</p>)}
+
+        </div>  
+
+              <br></br>
+             <h5>Previous Course details</h5>
+                <br></br>  
+            
+            
+            {Object.keys(prevcourses).length ? (
+              <Row>
+            {Object.values(prevcourses).map(item => (
+               <Col xs={6} md={3} key={item.course_id}>
+            <Card>
+              <Card.Body>
+               
+                <Card.Title>{item.course_id}</Card.Title>
+                <Card.Text>{item.title}</Card.Text>
+                <Card.Img variant="top" src={process.env.PUBLIC_URL + '/faded-book-logo.png'} />
+                {/* <Card.Text>{item.credits} hahh</Card.Text> */}
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+             ):(<p> No course detail available</p>)}
+            
+             
+
+{/* 
             {Object.keys(prevcourses).length ? (
              <ul>
-             {Object.values(prevcourses).map(item => (<li>{item.course_id} {item.title} {item.credits} {item.grade}</li>))}
+             {Object.values(prevcourses).map(item => (<li>
+              
+              {item.course_id} {item.title} {item.credits} {item.grade}
+              </li>))}
          </ul>
               ) : (
                 ( <p> No course detail available</p>))
-               } 
+               }  */}
             
             
             

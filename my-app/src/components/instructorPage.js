@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import {Card ,Row,Col,Table} from 'react-bootstrap';
 
 import { useParams ,Link } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ const InstructorPage = () => {
  
     (async () =>{
     try {
-        const response = await fetch(`http://localhost:3000/instrinfo/${i_id}`,{
+        const response = await fetch(`http://localhost:3001/instrinfo/${i_id}`,{
           method: 'GET',     
         });
         //onsole.log("what")
@@ -39,7 +39,7 @@ useEffect(()=>{
  
   (async () =>{
   try {
-      const response = await fetch(`http://localhost:3000/instrcurrinfo/${i_id}`,{
+      const response = await fetch(`http://localhost:3001/instrcurrinfo/${i_id}`,{
         method: 'GET',     
       });
       //onsole.log("what")
@@ -63,7 +63,7 @@ useEffect(()=>{
  
   (async () =>{
   try {
-      const response = await fetch(`http://localhost:3000/instrprevinfo/${i_id}`,{
+      const response = await fetch(`http://localhost:3001/instrprevinfo/${i_id}`,{
         method: 'GET',     
       });
       //onsole.log("what")
@@ -89,36 +89,86 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
-          <h1> Instructor info for {i_id} </h1>
-          <p> NAME : {instrInfo.name}</p>
-          <p> DEPT_NAME: {instrInfo.dept_name}</p>
+
+      <Table striped bordered hover variant="dark">
+      <thead>
+        <tr>
+          <th>Instructor ID</th>
+          <th>{i_id}</th>
+          <th>Name</th>
+          <th>{instrInfo.name}</th>
+          <th>Department</th>
+          <th>{instrInfo.dept_name}</th>
+         
+          
+        </tr>
+      </thead>
+      
+    </Table>
+         <div id="instr-body">
           <div>
             <h3> Current Courses</h3>
-          {Object.keys(curr_course).length ? ( 
-          <ul>
-                    {Object.values(curr_course).map(item => (
-                    <li >
-                      <Link to={`/course/${item.course_id}`}>{item.course_id}  {item.title}</Link>
-                       </li>
-                    ))}
-                </ul>
-                ):(
-                  <h6>None</h6>)}
-           </div>   
 
+            {Object.keys(curr_course).length ? (
+                    <Row>
+                    {Object.values(curr_course).map(item => (
+                       <Col xs={6} md={3} key={item.course_id}>
+                    <Card >
+                      <Card.Body>
+                       
+                        <Card.Title>
+                        <Link to={`/course/${item.course_id}`}>{item.course_id}  </Link>
+                        </Card.Title>
+                        <Card.Text>{item.title}</Card.Text>
+                        
+                        <Card.Img variant="top" src={process.env.PUBLIC_URL + '/book-logo.png'} />
+                        
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+                  
+                  
+               
+                
+                ):( <small>  No prereq</small>)}
+          </div>
+
+
+
+                      <br></br>
            <div>
+
+
            <h3> Previous Courses</h3>
 
-          {Object.keys(prev_course).length ? ( 
-          <ul>
+           {Object.keys(prev_course).length ? (
+                    <Row>
                     {Object.values(prev_course).map(item => (
-                    <li >
-                      {item.course_id}  {item.title}
-                       </li>
-                    ))}
-                </ul>
-                ):( <h6>None</h6>)}
+                       <Col xs={6} md={3} key={item.course_id}>
+                    <Card >
+                      <Card.Body>
+                       
+                        <Card.Title>
+                        <Link to={`/course/${item.course_id}`}>{item.course_id}  </Link>
+                        </Card.Title>
+                        <Card.Text>{item.title}</Card.Text>
+                        
+                        <Card.Img variant="top" src={process.env.PUBLIC_URL + '/faded-book-logo.png'} />
+                        
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+                  
+                  
+               
+                
+                ):( <small>  No prereq</small>)}
            </div> 
+           </div>
          
         </div>
       ) : (

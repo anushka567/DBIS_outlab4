@@ -11,7 +11,7 @@ const student_model=require("./student.js")
 const course_model=require("./courses.js")
 const instr_model=require("./instructor.js")
 app.use(cors({
-    origin: 'http://localhost:3001',
+    origin: 'http://localhost:3000',
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD','DELETE'],
     credentials: true,
   })
@@ -327,8 +327,8 @@ app.put('/registercourse/:id/:course_id/:sec_id',(req,res) => {
   });
   
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+app.listen(3001, () => {
+  console.log('Server listening on port 3001');
 });
 
 

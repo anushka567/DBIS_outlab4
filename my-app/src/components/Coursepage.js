@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
+import {Card ,Row,Col,Table} from 'react-bootstrap';
 
 import { useParams ,Link} from 'react-router-dom';
+
+
+
 
 const CoursePage = () => {
   const valid= sessionStorage.getItem('valid');  
@@ -15,7 +18,7 @@ const CoursePage = () => {
  
     (async () =>{
     try {
-        const response = await fetch(`http://localhost:3000/courseinfo/${c_id}`,{
+        const response = await fetch(`http://localhost:3001/courseinfo/${c_id}`,{
           method: 'GET',     
         });
         //onsole.log("what")
@@ -40,7 +43,7 @@ useEffect(()=>{
  
     (async () =>{
     try {
-        const response = await fetch(`http://localhost:3000/coursevenueinfo/${c_id}`,{
+        const response = await fetch(`http://localhost:3001/coursevenueinfo/${c_id}`,{
           method: 'GET',     
         });
         //onsole.log("what")
@@ -65,7 +68,7 @@ useEffect(()=>{
  
   (async () =>{
   try {
-      const response = await fetch(`http://localhost:3000/courseprereqinfo/${c_id}`,{
+      const response = await fetch(`http://localhost:3001/courseprereqinfo/${c_id}`,{
         method: 'GET',     
       });
       //onsole.log("what")
@@ -89,7 +92,7 @@ useEffect(()=>{
  
     (async () =>{
     try {
-        const response = await fetch(`http://localhost:3000/courseinstr/${c_id}`,{
+        const response = await fetch(`http://localhost:3001/courseinstr/${c_id}`,{
           method: 'GET',     
         });
         //onsole.log("what")
@@ -114,49 +117,109 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
-          <h1> Course info for {c_id} </h1>
-          <ul>
-            <li>{coursedata.title}</li>
-            <li>{coursedata.credits}</li>
-            <li>{coursedata.dept_name}</li>
 
+          
+      <Table striped bordered hover variant="dark">
+      <thead>
+        <tr>
+          <th>Course ID</th>
+          <th>{c_id}</th>
+          <th>Course Title</th>
+          <th>{coursedata.title}</th>
+          <th>Credits</th>
+          <th>{coursedata.credits}</th>
+          <th>Department</th>
+          <th>{coursedata.dept_name}</th>
+         
+          
+        </tr>
+      </thead>
+      
+    </Table>
+          
+          
+          
 
+            <div class="mx-auto" id='coursepage-body'> 
 
-            <li>Venue 
-                
-                {Object.keys(courseVenue).length ? ( <ul>
-                    {Object.values(courseVenue).map(item => (<li>{item.building} </li>))}
+            <h4>Venue </h4>
+               <div>
+               {Object.keys(courseVenue).length ? ( <ul class="list-group list-group-flush">
+                    {Object.values(courseVenue).map(item => (<li class="list-group-item">{item.building} </li>))}
                 </ul>
-                ):( <p>  No venue for this course this year</p>)}
+                ):( <p>  No venue for this course this year</p>)}</div> 
                 
-                </li>
-            
-            <li>Instructors
-                {Object.keys(courseinstr).length ? ( <ul>
+                
+                
+            <br></br>
+             <h4>Instructors</h4>
+                {Object.keys(courseinstr).length ? (
+                  
+                  
+                  
+                  
+                  
+                  
+                  <Row>
                     {Object.values(courseinstr).map(item => (
-                    <li >
-                      <Link to={`/instructor/${item.id}`}>{item.name}</Link>
-                       </li>
+                     <Col xs={6} md={3} key={item.course_id}>
+                     <Card>
+                       <Card.Body>
+                        
+                         <Card.Title>
+                         <Link to={`/instructor/${item.id}`}>{item.name}</Link>
+                          </Card.Title>
+                         <Card.Text>{item.title}</Card.Text>
+                         <Card.Img variant="top" src={process.env.PUBLIC_URL + '/teacher-logo.jpg'}  />
+                       </Card.Body>
+                     </Card>
+                   </Col> 
+                   
+                       
+                       
                     ))}
-                </ul>
+                </Row>
                 ):( <p>  No instructor taking this course this year</p>)}
                
-                </li>  
+                 
+              <br></br>
+              
+              <h4> Prerequisites</h4> 
 
-                <li>Prerequisites
-                {Object.keys(courseprereq).length ? ( <ul>
+                {Object.keys(courseprereq).length ? (
+                    <Row>
                     {Object.values(courseprereq).map(item => (
-                    <li >
-                      <Link to={`/course/${item.prereq_id}`}>{item.prereq_id}</Link>
-                       </li>
-                    ))}
-                </ul>
+                       <Col xs={6} md={3} key={item.prereq_id}>
+                    <Card >
+                      <Card.Body>
+                       
+                        <Card.Title>
+                        <Link to={`/course/${item.prereq_id}`}>{item.prereq_id}</Link>
+                        </Card.Title>
+                        
+                        <Card.Img variant="top" src={process.env.PUBLIC_URL + '/prereq-logo.jpg'} />
+                        
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+                  
+                  
+                  // <ul>
+                  //   {Object.values(courseprereq).map(item => (
+                  //   <li >
+                  //     <Link to={`/course/${item.prereq_id}`}>{item.prereq_id}</Link>
+                  //      </li>
+                  //   ))}
+                
                 ):( <p>  No prereq</p>)}
+                </div>
                
-                </li>   
+                   
 
 
-          </ul>
+          
 
           
          

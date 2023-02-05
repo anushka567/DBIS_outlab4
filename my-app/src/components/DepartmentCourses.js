@@ -1,5 +1,7 @@
 import React,{useState,useEffect} from 'react';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useParams ,Link } from 'react-router-dom';
+
 
 const DeptAllCourses = () => {
   const valid=sessionStorage.getItem('valid')
@@ -12,7 +14,7 @@ useEffect(()=>{
  
     (async () =>{
     try {
-        const response = await fetch(`http://localhost:3000/dept/${dept}`,{
+        const response = await fetch(`http://localhost:3001/dept/${dept}`,{
           method: 'GET',     
         });
         //onsole.log("what")
@@ -38,18 +40,21 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
-          <h1>List of courses running under {dept} department </h1>
+           <div class="justify-content-center align-items-sm-right text-light bg-dark">
+        <h2 class="font-monospace "> List of courses running under {dept} department </h2></div>
+
+        <div id="cud-inner">
           {Object.keys(allCoursebydept).length ? ( 
-          <ul>
+          <ListGroup>
                     {Object.values(allCoursebydept).map(item => (
-                    <li >
+                    <ListGroupItem >
                       <Link to={`/course/${item.course_id}`}>{item.course_id}  {item.title}</Link>
-                       </li>
+                       </ListGroupItem>
                     ))}
-                </ul>
+                </ListGroup>
                 ):(
                   <h6>None</h6>)}
-         
+         </div>
         </div>
       ) : (
         window.location.href='/'
