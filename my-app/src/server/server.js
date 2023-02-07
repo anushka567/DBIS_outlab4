@@ -25,6 +25,7 @@ app.use(
     //     connectionString: process.env.DATABASE_URL
     //   })
     // }),
+    name :'sessionId',
     secret: 'secret',
     resave: false,
     saveUninitialized:true ,
@@ -71,8 +72,8 @@ app.get('/dashboard', checksession, (req, res) => {
 app.get('/studentinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    console.log(req.session.userId)
-    if (req.session.userId===null) {
+    // console.log(req.session.userId)
+    if (req.session.userId==null) {
       console.log("oh no")
       return res.status(401).json({ message: 'Not   authorized' });
     }
@@ -99,7 +100,7 @@ app.get('/studentinfo/:id', (req, res) => {
   app.get('/studentcourseinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     student_model.getStudentCourseInfo(req.params.id)
@@ -116,7 +117,7 @@ app.get('/studentinfo/:id', (req, res) => {
   app.get('/studentprevcourseinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     student_model.getStudentPrevCourseInfo(req.params.id)
@@ -139,7 +140,7 @@ app.get('/studentinfo/:id', (req, res) => {
     // console.log(req.params.course_id)
     //console.log("hahahaha334343")
 
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     if(req.session.userId===req.params.id )
@@ -171,7 +172,7 @@ app.get('/studentinfo/:id', (req, res) => {
 app.get('/courseinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getCourseInfo(req.params.id)
@@ -188,7 +189,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/courseprereqinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getCoursePrereq(req.params.id)
@@ -205,7 +206,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/courseExtrainfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getCourseExtraInfo(req.params.id)
@@ -222,7 +223,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/coursevenueinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getCoursevenue(req.params.id)
@@ -239,7 +240,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/courseinstr/:id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getCourseInstr(req.params.id)
@@ -259,7 +260,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/instrinfo/:instructor_id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     instr_model.getInstrInfo(req.params.instructor_id)
@@ -277,7 +278,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/instrcurrinfo/:instructor_id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     instr_model.getInstrCurrInfo(req.params.instructor_id)
@@ -295,7 +296,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/instrprevinfo/:instructor_id', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     instr_model.getInstrPrevInfo(req.params.instructor_id)
@@ -313,7 +314,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/activedept', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getActiveDept()
@@ -330,7 +331,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get("/dept/:dept_name",(req, res) => {
     
     // console.log(req.params.dept_name)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getCourseByDept(req.params.dept_name)
@@ -347,7 +348,7 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/current_courses', (req, res) => {
     
     //console.log(req.params.id)
-    if (req.session.userId===null) {
+    if (req.session.userId==null) {
       return res.status(401).json({ message: 'Not   authorized' });
     }
     course_model.getCurrentCoursesID()
@@ -371,7 +372,7 @@ app.put('/registercourse/:id/:course_id/:sec_id',(req,res) => {
 
 
   //prereq
-  if (req.session.userId===null) {
+  if (req.session.userId==null) {
     return res.status(401).json({ message: 'Not   authorized' });
   }
   if(req.session.userId===req.params.id )
@@ -395,7 +396,27 @@ app.put('/registercourse/:id/:course_id/:sec_id',(req,res) => {
 
 });
 
+// app.get('/logout',(req,res)=> {
+  
+//   if(req.session.username){
+//     req.session.destroy();
+//     return res.json({message:'Logout Successful'});
+//   }
 
+// });
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      // Handle the error
+    } else {
+      console.log(req.session)
+      res.clearCookie('sesionId')
+      res.redirect('/home');
+      console.log(req.session)
+     
+    }
+  });
+});
 
   app.get('/checkSession', (req, res) => {
     if (req.session.username) {

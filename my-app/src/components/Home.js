@@ -139,6 +139,8 @@ async function  delete_course(course_id){
 
 }
 
+
+
   return (
     
 
@@ -158,16 +160,7 @@ async function  delete_course(course_id){
         
 
       
-     <Table striped bordered hover variant="dark">
-      <thead>
-        <tr>
-          <th class="text-center"><Link to="/home">Home</Link></th>
-          <th class="text-center"><Link to="/course/running">Running Courses</Link></th>
-          <th class="text-center"><Link to="/home/registration">Registration</Link></th>
-          
-        </tr>
-      </thead>
-      </Table>
+  
 
       
 

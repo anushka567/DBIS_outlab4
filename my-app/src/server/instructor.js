@@ -74,6 +74,7 @@ const getInstrInfo = async (req, res) => {
   const is_instructor = async (req, res) => {
     try{
       const id = req.id
+      const client = await pool.connect();
       const result = await client.query(`
       SELECT * FROM  instructor  WHERE id = \'${id}\' 
       
