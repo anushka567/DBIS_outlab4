@@ -91,6 +91,7 @@ const getStudentInfo = async (req, res) => {
           `);
           client.release();
           //console.log(result.rows)
+         
           return result.rows;
         } catch (error) {
           console.error(error);

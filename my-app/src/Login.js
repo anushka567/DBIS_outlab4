@@ -15,7 +15,8 @@ const Login = ({handleLogin}) => {
       const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
+        credentials : 'include'
       });
       const data = await response.json();
       if (data.message === 'Login successful') {

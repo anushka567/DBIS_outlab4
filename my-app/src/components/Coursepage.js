@@ -19,7 +19,8 @@ const CoursePage = () => {
     (async () =>{
     try {
         const response = await fetch(`http://localhost:3001/courseinfo/${c_id}`,{
-          method: 'GET',     
+          method: 'GET', 
+          credentials:'include',      
         });
         //onsole.log("what")
         const data = await response.json();
@@ -44,7 +45,8 @@ useEffect(()=>{
     (async () =>{
     try {
         const response = await fetch(`http://localhost:3001/coursevenueinfo/${c_id}`,{
-          method: 'GET',     
+          method: 'GET', 
+          credentials:'include',      
         });
         //onsole.log("what")
         const data = await response.json();
@@ -69,7 +71,8 @@ useEffect(()=>{
   (async () =>{
   try {
       const response = await fetch(`http://localhost:3001/courseprereqinfo/${c_id}`,{
-        method: 'GET',     
+        method: 'GET',  
+        credentials:'include',     
       });
       //onsole.log("what")
       const data = await response.json();
@@ -93,7 +96,8 @@ useEffect(()=>{
     (async () =>{
     try {
         const response = await fetch(`http://localhost:3001/courseinstr/${c_id}`,{
-          method: 'GET',     
+          method: 'GET', 
+          credentials:'include',      
         });
         //onsole.log("what")
         const data = await response.json();
@@ -117,7 +121,16 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
-
+<Table striped bordered hover variant="dark">
+<thead>
+  <tr>
+    <th class="text-center"><Link to="/home">Home</Link></th>
+    <th class="text-center"><Link to="/course/running">Running Courses</Link></th>
+    <th class="text-center"><Link to="/home/registration">Registration</Link></th>
+    
+  </tr>
+</thead>
+</Table>
           
       <Table striped bordered hover variant="dark">
       <thead>
@@ -145,9 +158,25 @@ useEffect(()=>{
             <h4>Venue </h4>
                <div>
                {Object.keys(courseVenue).length ? ( <ul class="list-group list-group-flush">
-                    {Object.values(courseVenue).map(item => (<li class="list-group-item">{item.building} </li>))}
+                    {Object.values(courseVenue).map(item => (<li class="list-group-item">
+                      
+                      <Table striped bordered hover variant="dark">
+      <thead>
+        <tr>
+          <th>Section ID </th>
+          <th>{item.sec_id}</th>
+          <th>Building</th>
+          <th>{item.building}</th>
+          <th>Classroom</th>
+          <th>{item.room_number}</th>
+     
+          
+        </tr>
+      </thead>
+      </Table>
+                      </li>))}
                 </ul>
-                ):( <p>  No venue for this course this year</p>)}</div> 
+                ):( <p  class="list-group-item">  No venue for this course this semester</p>)}</div> 
                 
                 
                 
@@ -165,10 +194,13 @@ useEffect(()=>{
                      <Col xs={6} md={3} key={item.course_id}>
                      <Card>
                        <Card.Body>
-                        
-                         <Card.Title>
-                         <Link to={`/instructor/${item.id}`}>{item.name}</Link>
-                          </Card.Title>
+                       <div class="card-body d-flex justify-content-between">
+                 <h5 class="card-title">
+                 <Link to={`/instructor/${item.id}`}>{item.name}  </Link>
+                   </h5>
+                 <h5 class="card-title"> S :  {item.sec_id}</h5>
+                 </div>
+                      
                          <Card.Text>{item.title}</Card.Text>
                          <Card.Img variant="top" src={process.env.PUBLIC_URL + '/teacher-logo.jpg'}  />
                        </Card.Body>
@@ -179,7 +211,7 @@ useEffect(()=>{
                        
                     ))}
                 </Row>
-                ):( <p>  No instructor taking this course this year</p>)}
+                ):( <p class="list-group-item">  No instructor taking this course this semester</p>)}
                
                  
               <br></br>
@@ -213,7 +245,7 @@ useEffect(()=>{
                   //      </li>
                   //   ))}
                 
-                ):( <p>  No prereq</p>)}
+                ):( <p class="list-group-item">  None </p>)}
                 </div>
                
                    

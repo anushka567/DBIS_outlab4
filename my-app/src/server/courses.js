@@ -45,14 +45,18 @@ const getCourseInfo = async (req, res) => {
       
   
       const c_id=req
-      let year=new Date().getFullYear();
-      year-=13
+      let date = new Date();
+      date.setFullYear(date.getFullYear()-13)
+      let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
+      console.log(timestamp);
      // console.log(c_id)
       const client = await pool.connect();
 
       const result = await client.query(`
         
-        select distinct building from course natural join section where  course_id = \'${c_id}\' and year= \'${year}\'  `);
+        select * from classroom natural join section where  course_id = \'${c_id}\' and year= \'${date.getFullYear()}\' 
+        and semester=(select semester from reg_dates where start_time <= \'${timestamp}\' order by start_time desc limit 1)
+        `);
       client.release();
       //console.log(result.rows)
       return result.rows;
@@ -68,12 +72,15 @@ const getCourseInfo = async (req, res) => {
       
   
       const c_id=req
-      let year=new Date().getFullYear();
-      year-=13
+      let date = new Date();
+      date.setFullYear(date.getFullYear()-13)
+      let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
+      console.log(timestamp);
       //console.log(c_id)
       const client = await pool.connect();
       const result = await client.query(`
-        select * from teaches natural join instructor where  course_id = \'${c_id}\' and year= \'${year}\'
+        select * from teaches natural join instructor where  course_id = \'${c_id}\' and year= \'${date.getFullYear()}\' and 
+        semester=(select semester from reg_dates where start_time <= \'${timestamp}\' order by start_time desc limit 1)
           `);
       client.release();
       //console.log(result.rows)
@@ -202,23 +209,74 @@ async function registerforcourse(id,course_id,sec_id,res){
     try {
      
      // const [id,course_id,sec_id]=req
-      console.log("hi")
-      console.log(id,course_id,sec_id)
-      console.log("bye")
-      let year=new Date().getFullYear();
-      year-=13
+  
+     
+
+
+      let date = new Date();
+      date.setFullYear(date.getFullYear()-13)
+      let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
       
       const client = await pool.connect();
-      const result = await client.query(`
-        insert into takes(id,course_id,sec_id,semester,year,grade) values(\'${id}\',\'${course_id}\',\'${sec_id}\',\'Summer\',\'${year}\',null)
+      const result = await client.query
+      (`
+            with sem as 
+                ( select semester from reg_dates where start_time <= \'${timestamp}\' order by start_time desc limit 1 )
+            INSERT INTO takes (ID, course_id, sec_id, semester, year,grade)
+            SELECT \'${id}\', \'${course_id}\', \'${sec_id}\', sem.semester, \'${date.getFullYear()}\',null from sem
+            WHERE NOT EXISTS (
+  
+              SELECT prereq_id
+              FROM prereq
+              WHERE course_id = \'${course_id}\'
+               AND prereq_id NOT IN 
+                  (
+                    SELECT course_id
+                    FROM takes
+                    WHERE ID = \'${id}\'
+                    and(
+                      (year <\'${date.getFullYear()}\') 
+                      or 
+                      (year =  \'${date.getFullYear()}\' and
+                    (case semester when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)<
+                    (case sem.semester  when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)
+                    )
+                    ) 
+                  )
+             )
+             AND EXISTS (
+                    SELECT time_slot_id
+                     FROM time_slot
+                    NATURAL JOIN section
+                     WHERE course_id = \'${course_id}\' and sec_id=\'${sec_id}\'
+                       AND (time_slot_id, day, start_hr, start_min) NOT IN 
+                       (
+                          SELECT time_slot_id, day, start_hr, start_min
+                          FROM time_slot
+                          NATURAL JOIN section NATURAL JOIN takes 
+                          WHERE ID =\'${id}\' and year=\'${date.getFullYear()}\' and semester=sem.semester
+                       )
+            )
+            AND NOT EXISTS (
+              SELECT course_id
+             FROM takes
+              WHERE ID =\'${id}\'
+                AND course_id = \'${course_id}\'
+                AND semester = sem.semester
+                AND year = \'${date.getFullYear()}\'
+            )
+
           `);
+      
       client.release();
       //console.log(result.rows)
-      return result.rows;
+      console.log(result)
+      return result;
     } catch (error) {
       console.log("culprit")
+      console.log(error.lineNumber)
       console.error(error);
-      return res.status(500).json({ message: 'An error occurred while trying to validate the user' });
+      return res.status(530).json({ message: 'An error occurred while trying to validate the user' });
     }
   };  
 

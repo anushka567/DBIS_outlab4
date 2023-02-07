@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useState,useEffect } from 'react';
+import { BrowserRouter, Routes, Route  } from "react-router-dom";
 import Login from './Login';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
@@ -12,6 +12,9 @@ import Registration from './components/registration';
 const App = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+
+  
+
 
   const handleLogin = (username) => {
     sessionStorage.setItem('valid',true);

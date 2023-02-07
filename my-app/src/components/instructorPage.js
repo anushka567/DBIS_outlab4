@@ -16,7 +16,8 @@ const InstructorPage = () => {
     (async () =>{
     try {
         const response = await fetch(`http://localhost:3001/instrinfo/${i_id}`,{
-          method: 'GET',     
+          method: 'GET', 
+          credentials:'include',      
         });
         //onsole.log("what")
         const data = await response.json();
@@ -40,7 +41,8 @@ useEffect(()=>{
   (async () =>{
   try {
       const response = await fetch(`http://localhost:3001/instrcurrinfo/${i_id}`,{
-        method: 'GET',     
+        method: 'GET', 
+        credentials:'include',      
       });
       //onsole.log("what")
       const data = await response.json();
@@ -64,7 +66,8 @@ useEffect(()=>{
   (async () =>{
   try {
       const response = await fetch(`http://localhost:3001/instrprevinfo/${i_id}`,{
-        method: 'GET',     
+        method: 'GET', 
+        credentials:'include',      
       });
       //onsole.log("what")
       const data = await response.json();
@@ -89,7 +92,16 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
-
+<Table striped bordered hover variant="dark">
+<thead>
+  <tr>
+    <th class="text-center"><Link to="/home">Home</Link></th>
+    <th class="text-center"><Link to="/course/running">Running Courses</Link></th>
+    <th class="text-center"><Link to="/home/registration">Registration</Link></th>
+    
+  </tr>
+</thead>
+</Table>
       <Table striped bordered hover variant="dark">
       <thead>
         <tr>
@@ -132,7 +144,7 @@ useEffect(()=>{
                   
                
                 
-                ):( <small>  No prereq</small>)}
+                ):( <p class="list-group-item">  None </p>)}
           </div>
 
 
@@ -166,7 +178,7 @@ useEffect(()=>{
                   
                
                 
-                ):( <small>  No prereq</small>)}
+                ):( <p class="list-group-item">  None </p>)}
            </div> 
            </div>
          

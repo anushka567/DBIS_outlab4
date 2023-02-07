@@ -27,7 +27,12 @@ app.use(
     // }),
     secret: 'secret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized:true ,
+    cookie : {
+      httpOnly:false,
+      secure:false,
+
+    }
   })
 );
 
@@ -46,7 +51,7 @@ app.post('/login',auth.validateAndAuthenticateUser,(req, res) => {
 //   req.session.username = username;
 //   res.send({ message: 'Login successful' });
 
-req.session.user=req.user;
+req.session.userId=req.body.username;
 
 return res.json({message:'Login successful'});
 });
@@ -66,15 +71,27 @@ app.get('/dashboard', checksession, (req, res) => {
 app.get('/studentinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
-    student_model.getStudentInfo(req.params.id)
-    .then(response => {
-        //console.log(response)
-      res.status(200).send(response);
-    })
-    .catch(error => {
+    console.log(req.session.userId)
+    if (req.session.userId===null) {
+      console.log("oh no")
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
+    if(req.session.userId!==req.params.id && instr_model.is_instructor(req.params.id)== false  )
+    {
       
-      res.status(500).send(error);
-    })
+      return res.status(401).json({ message: 'Forbidden' });
+    }
+    
+      student_model.getStudentInfo(req.params.id)
+      .then(response => {
+          //console.log(response)
+        res.status(200).send(response);
+      })
+      .catch(error => {
+        
+        res.status(500).send(error);
+      })
+  
   })
 
 
@@ -82,6 +99,9 @@ app.get('/studentinfo/:id', (req, res) => {
   app.get('/studentcourseinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     student_model.getStudentCourseInfo(req.params.id)
     .then(response => {
         //console.log(response)
@@ -96,6 +116,9 @@ app.get('/studentinfo/:id', (req, res) => {
   app.get('/studentprevcourseinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     student_model.getStudentPrevCourseInfo(req.params.id)
     .then(response => {
         //console.log(response)
@@ -116,16 +139,27 @@ app.get('/studentinfo/:id', (req, res) => {
     // console.log(req.params.course_id)
     //console.log("hahahaha334343")
 
-    
-    student_model.deleteCourse(req.params.id,req.params.course_id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
+    if(req.session.userId===req.params.id )
+    {
+      student_model.deleteCourse(req.params.id,req.params.course_id)
     .then(() => {
         //console.log(response)
-      res.status(200).send({message:"delete success"});
+        if(res.rowCount == 0){
+          res.status(200).send({message:"Failed to delete the course"})
+        }else{
+        res.status(200).send({message:"delete success"});
+        }
     })
     .catch(error => {
       
       res.status(500).send(error);
     })
+      
+    }
+    
   })  
 
 
@@ -137,6 +171,9 @@ app.get('/studentinfo/:id', (req, res) => {
 app.get('/courseinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getCourseInfo(req.params.id)
     .then(response => {
         //console.log(response)
@@ -151,6 +188,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/courseprereqinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getCoursePrereq(req.params.id)
     .then(response => {
         //console.log(response)
@@ -165,6 +205,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/courseExtrainfo/:id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getCourseExtraInfo(req.params.id)
     .then(response => {
         //console.log(response)
@@ -179,6 +222,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/coursevenueinfo/:id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getCoursevenue(req.params.id)
     .then(response => {
         //console.log(response)
@@ -193,6 +239,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/courseinstr/:id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getCourseInstr(req.params.id)
     .then(response => {
         //console.log(response)
@@ -210,6 +259,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/instrinfo/:instructor_id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     instr_model.getInstrInfo(req.params.instructor_id)
     .then(response => {
         //console.log(response)
@@ -225,6 +277,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/instrcurrinfo/:instructor_id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     instr_model.getInstrCurrInfo(req.params.instructor_id)
     .then(response => {
         //console.log(response)
@@ -240,6 +295,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/instrprevinfo/:instructor_id', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     instr_model.getInstrPrevInfo(req.params.instructor_id)
     .then(response => {
         //console.log(response)
@@ -255,6 +313,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/activedept', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getActiveDept()
     .then(response => {
         //console.log(response)
@@ -269,7 +330,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get("/dept/:dept_name",(req, res) => {
     
     // console.log(req.params.dept_name)
-
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getCourseByDept(req.params.dept_name)
     .then(response => {
         //console.log(response)
@@ -284,6 +347,9 @@ app.get('/courseinfo/:id', (req, res) => {
   app.get('/current_courses', (req, res) => {
     
     //console.log(req.params.id)
+    if (req.session.userId===null) {
+      return res.status(401).json({ message: 'Not   authorized' });
+    }
     course_model.getCurrentCoursesID()
     .then(response => {
         //console.log(response)
@@ -305,14 +371,27 @@ app.put('/registercourse/:id/:course_id/:sec_id',(req,res) => {
 
 
   //prereq
-
-    course_model.registerforcourse(req.params.id,req.params.course_id,req.params.sec_id)
-    .then(response => {
-     res.status(200).send(response);
+  if (req.session.userId===null) {
+    return res.status(401).json({ message: 'Not   authorized' });
+  }
+  if(req.session.userId===req.params.id )
+    {
+     course_model.registerforcourse(req.params.id,req.params.course_id,req.params.sec_id)
+     
+    .then(result => {
+      console.log(result.rowCount===0)
+      console.log('hi')
+      if(result.rowCount ===0 ){
+        console.log("get")
+        res.status(200).send({message:"Already registered/Prerequisite Not Satisfied/Time Slot Clash"});
+       }else{
+     res.status(200).send({message:"Success"});
+       }
   })
   .catch(error => {
        res.status(500).send(error);
   })
+}
 
 });
 

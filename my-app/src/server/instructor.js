@@ -69,6 +69,27 @@ const getInstrInfo = async (req, res) => {
     }
   };
 
-  module.exports ={getInstrInfo,getInstrCurrInfo,getInstrPrevInfo}
+
+  
+  const is_instructor = async (req, res) => {
+    try{
+      const id = req.id
+      const result = await client.query(`
+      SELECT * FROM  instructor  WHERE id = \'${id}\' 
+      
+      `);
+      client.release();
+      //console.log(result.rows)
+      if(result.rowCount===0){
+        return false
+      }
+      return true
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'An error occurred while trying to validate the user' });
+    }
+  };
+
+  module.exports ={getInstrInfo,getInstrCurrInfo,getInstrPrevInfo,is_instructor}
 
 

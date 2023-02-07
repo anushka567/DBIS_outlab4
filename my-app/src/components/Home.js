@@ -1,10 +1,16 @@
-import React, {  useEffect, useState } from 'react';
+import React, {   useEffect, useState } from 'react';
 import {Card ,Row,Col,Button,Table} from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+
+
 const Home = () => {
 
 
   const user=sessionStorage.getItem('user');
-  const valid= sessionStorage.getItem('valid');  
+  const valid= sessionStorage.getItem('valid');
+  let reg_trigger = 0
+  sessionStorage.setItem('reg-trigger',reg_trigger)  
   const [trigger,setTrigger]=useState(0)
   const [studentInfo,setStudentInfo]=useState("")
   const [courses,setCourses]=useState("")
@@ -21,14 +27,15 @@ const Home = () => {
        
        
         const response = await fetch(`http://localhost:3001/studentinfo/${id}`,{
-          method: 'GET',     
+          method: 'GET', 
+          credentials:'include',  
         });
         console.log("what")
         const data = await response.json();
         if (data) {
-    
+          if (!data.message){
           setStudentInfo(data[0])
-          
+          }
   
         } else {
           setStudentInfo("Could not retrieve information")
@@ -50,7 +57,8 @@ useEffect(()=>{
        
        
         const response = await fetch(`http://localhost:3001/studentcourseinfo/${id}`,{
-          method: 'GET',     
+          method: 'GET',
+          credentials:'include',       
         });
         //onsole.log("what")
         const data = await response.json();
@@ -66,7 +74,7 @@ useEffect(()=>{
         console.log(error.message)
       }
   })();
-},[id,trigger]);
+},[id,trigger,reg_trigger]);
   
 useEffect(()=>{ 
  
@@ -77,7 +85,8 @@ useEffect(()=>{
        
        
         const response = await fetch(`http://localhost:3001/studentprevcourseinfo/${id}`,{
-          method: 'GET',     
+          method: 'GET', 
+          credentials:'include',      
         });
         //onsole.log("what")
         const data = await response.json();
@@ -104,7 +113,8 @@ async function  delete_course(course_id){
        
        
         const response = await fetch(`http://localhost:3001/deletecourse/${id}/${course_id}`,{
-          method: 'DELETE',     
+          method: 'DELETE',
+          credentials:'include',       
         });
         console.log("hahahah")
         const data = await response.json();
@@ -130,6 +140,7 @@ async function  delete_course(course_id){
 }
 
   return (
+    
 
     <div class="justify-content-center" id="home-body">
 
@@ -144,15 +155,26 @@ async function  delete_course(course_id){
         <div >
  
   
-  
+        
 
+      
+     <Table striped bordered hover variant="dark">
+      <thead>
+        <tr>
+          <th class="text-center"><Link to="/home">Home</Link></th>
+          <th class="text-center"><Link to="/course/running">Running Courses</Link></th>
+          <th class="text-center"><Link to="/home/registration">Registration</Link></th>
+          
+        </tr>
+      </thead>
+      </Table>
 
       
 
       <Table striped bordered hover variant="dark">
       <thead>
         <tr>
-          <th>Student ID</th>
+          <th >Student ID</th>
           <th>{user}</th>
           <th>Name</th>
           <th>{studentInfo.name}</th>
@@ -190,9 +212,13 @@ async function  delete_course(course_id){
                 >
                   <Card.Text>Credits:{item.credits} </Card.Text>
                 </div>
+                <div class="card-body d-flex justify-content-between">
+                 <h5 class="card-title">
+                 <Link to={`/course/${item.course_id}`}>{item.course_id}  </Link>
+                   </h5>
+                 <h5 class="card-title"> S : {item.sec_id}</h5>
+                 </div>
                
-                <Card.Title>{item.course_id}  S{item.sec_id}  </Card.Title>
-
                 <Card.Text> {item.title} </Card.Text>
                 <Button variant="danger float-right"  onClick={()=> delete_course(item.course_id)}>Drop</Button>
                
@@ -201,7 +227,7 @@ async function  delete_course(course_id){
           </Col>
         ))}
       </Row>
-             ):(<p> No course detail available</p>)}
+             ):(<p class="list-group-item"> Not enrolled in any ongoing course </p>)}
 
         </div>  
 
@@ -217,7 +243,8 @@ async function  delete_course(course_id){
             <Card>
               <Card.Body>
                
-                <Card.Title>{item.course_id}</Card.Title>
+                <Card.Title>
+                <Link to={`/course/${item.course_id}`}>{item.course_id}  </Link> </Card.Title>
                 <Card.Text>{item.title}</Card.Text>
                 <Card.Img variant="top" src={process.env.PUBLIC_URL + '/faded-book-logo.png'} />
                 {/* <Card.Text>{item.credits} hahh</Card.Text> */}
@@ -226,7 +253,7 @@ async function  delete_course(course_id){
           </Col>
         ))}
       </Row>
-             ):(<p> No course detail available</p>)}
+             ):(<p class="list-group-item">  No previous courses undertaken </p>)}
             
              
 
@@ -250,6 +277,7 @@ async function  delete_course(course_id){
         window.location.href='/'
       )}
     </div>
+    
   );
 };
 

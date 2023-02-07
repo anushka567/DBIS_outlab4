@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem ,Table } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 const Department = () => {
 
@@ -11,7 +11,8 @@ const Department = () => {
     (async () =>{
     try {
         const response = await fetch(`http://localhost:3001/activedept`,{
-          method: 'GET',     
+          method: 'GET',  
+          credentials:'include',     
         });
         //onsole.log("what")
         const data = await response.json();
@@ -35,7 +36,23 @@ const Department = () => {
 
     <div>
       {valid ? (
+<div>
+<Table striped bordered hover variant="dark">
+<thead>
+  <tr>
+    <th class="text-center"><Link to="/home">Home</Link></th>
+    <th class="text-center"><Link to="/course/running">Running Courses</Link></th>
+    <th class="text-center"><Link to="/home/registration">Registration</Link></th>
+    
+  </tr>
+</thead>
+</Table>
         <div id='cod-body' >
+       
+
+      
+
+     
            <div class="justify-content-center align-items-sm-right text-light bg-dark">
         <h2 class="font-monospace ">Departments Offering Courses in the Current Semester </h2></div>
          
@@ -46,7 +63,8 @@ const Department = () => {
                         <Link to={`/course/running/${item.dept_name}`}>{ item.dept_name} </Link>
                         </ListGroupItem>))}
                 </ListGroup>
-                ):( <p>  No Department offering a course right now.</p>)}
+                ):( <p class="list-group-item">  No Department offering a course right now.</p>)}
+        </div>
         </div>
         </div>
       ) : (

@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem,Table } from 'react-bootstrap';
 import { useParams ,Link } from 'react-router-dom';
 
 
@@ -15,7 +15,8 @@ useEffect(()=>{
     (async () =>{
     try {
         const response = await fetch(`http://localhost:3001/dept/${dept}`,{
-          method: 'GET',     
+          method: 'GET',
+          credentials:'include',       
         });
         //onsole.log("what")
         const data = await response.json();
@@ -40,6 +41,16 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
+          <Table striped bordered hover variant="dark">
+<thead>
+  <tr>
+    <th class="text-center"><Link to="/home">Home</Link></th>
+    <th class="text-center"><Link to="/course/running">Running Courses</Link></th>
+    <th class="text-center"><Link to="/home/registration">Registration</Link></th>
+    
+  </tr>
+</thead>
+</Table>
            <div class="justify-content-center align-items-sm-right text-light bg-dark">
         <h2 class="font-monospace "> List of courses running under {dept} department </h2></div>
 
@@ -53,7 +64,7 @@ useEffect(()=>{
                     ))}
                 </ListGroup>
                 ):(
-                  <h6>None</h6>)}
+                  <p class="list-group-item">  None </p>)}
          </div>
         </div>
       ) : (
