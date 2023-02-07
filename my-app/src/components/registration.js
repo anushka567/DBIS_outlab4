@@ -34,12 +34,17 @@ const Registration = () => {
   const handleInputChange = (event) => {
     
     setInputValue(() => {
-      
+      // console.log(event.target.value)
+      if(event.target.value===""){
+        setSuggestions([])
+      }
+      else{
       setSuggestions(
             courseIds.filter((courseId) =>
               courseId.toLowerCase().includes(event.target.value.toLowerCase())
             )
           );
+      }
         return event.target.value
     });
     
