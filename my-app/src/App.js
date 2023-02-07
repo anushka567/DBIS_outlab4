@@ -1,6 +1,6 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState} from 'react';
 import { BrowserRouter, Routes, Route,Link  } from "react-router-dom";
-import {Table} from "react-bootstrap";
+import {Table} from 'react-bootstrap';
 import Login from './Login';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
@@ -14,7 +14,7 @@ const App = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
 
-  
+  const valid=sessionStorage.getItem('valid')
 
 
   const handleLogin = (username) => {
@@ -35,7 +35,7 @@ const App = () => {
         .then(() => {
           // Redirect the user to the login page
           sessionStorage.clear()
-          window.location.href = '/home';
+          window.location.href = '/login';
           
         })
         .catch((err) => {
@@ -63,7 +63,7 @@ const App = () => {
             sessionStorage.clear()
    
             console.log(sessionStorage.getItem('valid'))
-            window.location.href='/' 
+            window.location.href='/login' 
             
           }else{
             console.log("Could not Logout")
@@ -83,22 +83,37 @@ const App = () => {
 
   return (
     <BrowserRouter>
-    <div>
-    {/* <Table striped bordered hover variant="dark">
-      <thead>
-        <tr>
-          <th class="text-center"><Link to="/home">Home</Link></th>
-          <th class="text-center"><Link to="/course/running">Running Courses</Link></th>
-          <th class="text-center"><Link to="/home/registration">Registration</Link></th>
-          <button class='btn btn-danger' onClick={handleLogout}>Logout</button>
-        </tr>
-      </thead>
-      </Table> */}
-      <button  onClick={LogoutButton}>Logout</button>
-    </div>
+    {valid? (<div>
+      {/* <Table striped bordered hover variant="dark">
+<thead>
+  <tr>
+    <th class="text-center"></th>
+    <th class="text-center"></th>
+    <th class="text-center"></th>
+    
+  </tr>
+</thead>
+</Table> */}
+<div class="d-flex justify-content-center bg-dark">
+<div class="text-light"> <h5>IITASC</h5></div>
+<hr></hr>
+  <div> <h5><Link to="/home">Home</Link></h5></div>
+  <hr></hr>
+  <div> <h5><Link to="/course/running">Running Courses</Link></h5></div>
+  <hr></hr>
+  <div> <h5><Link to="/home/registration">Registration</Link></h5></div>
+  <hr></hr>
+  <div > <h5><button  class="btn btn-danger" onClick={LogoutButton}>Logout</button></h5></div>
+  <hr></hr>
+</div>
+     
+    
+  </div>):(<h1 class="bg-dark text-light">IITASC</h1>)}
+ 
+    
     <Routes>
       <Route path="/" element ={<Dashboard /> }/>
-      <Route path="/login"  element={<Login handleLogin={handleLogin}/>} />
+      <Route exact path="/login"  element={<Login handleLogin={handleLogin}/>} />
       <Route path="/home"  element={<Home username={user} />}/>
       <Route path="/home/registration"  element={<Registration />}/>
       <Route path="/dashboard" element={<Dashboard />} />

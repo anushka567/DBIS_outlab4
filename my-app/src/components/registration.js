@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {Link} from 'react-router-dom';
-import { Table } from 'react-bootstrap';
 import CoursePanel from "./coursepanel.js"
 const Registration = () => {
   const valid=sessionStorage.getItem('valid')
@@ -21,11 +19,17 @@ const Registration = () => {
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
+    console.log(inputValue)
+    if(!inputValue){
+      setSuggestions([])
+    }
+    else{
     setSuggestions(
       courseIds.filter((courseId) =>
         courseId.toLowerCase().includes(event.target.value.toLowerCase())
       )
     );
+    }
   };
 
   return (
@@ -33,7 +37,7 @@ const Registration = () => {
     <div>
       {valid ? (
         <div>
-          <Table striped bordered hover variant="dark">
+          {/* <Table striped bordered hover variant="dark">
 <thead>
   <tr>
     <th class="text-center"><Link to="/home">Home</Link></th>
@@ -42,7 +46,7 @@ const Registration = () => {
     
   </tr>
 </thead>
-</Table>
+</Table> */}
 
 <div class="form-group has-search">
 <i class="fa fa-search"></i>

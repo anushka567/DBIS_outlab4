@@ -27,7 +27,7 @@ const getInstrInfo = async (req, res) => {
   
       const i_id=req
       let date=new Date();
-      date.setFullYear(date.getFullYear()-13)
+      // date.setFullYear(date.getFullYear()-13)
       let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
       console.log(timestamp)
       //console.log(i_id)
@@ -35,7 +35,8 @@ const getInstrInfo = async (req, res) => {
       const client = await pool.connect();
       const result = await client.query(
         `
-        SELECT * FROM  instructor natural join teaches WHERE id = \'${i_id}\' and year= \'${date.getFullYear()}\' and semester=(select semester from reg_dates  where start_time <= \'${timestamp}\' order by start_time desc limit 1) order by course_id asc
+        with year_table as (select year as x from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1 ) 
+        SELECT * FROM  instructor natural join teaches,year_table WHERE id = \'${i_id}\' and year= year_table.x and semester=(select semester from reg_dates  where start_time <= \'${timestamp}\' order by start_time desc limit 1) order by course_id asc
       `);
       client.release();
       //console.log(result.rows)
@@ -52,12 +53,18 @@ const getInstrInfo = async (req, res) => {
   
       const i_id=req
       let date=new Date();
-      date.setFullYear(date.getFullYear()-13)
+      // date.setFullYear(date.getFullYear()-13)
       let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
       //console.log(i_id)
       const client = await pool.connect();
       const result = await client.query(`
-      SELECT * FROM  instructor natural join teaches WHERE id = \'${i_id}\' and ((year <\'${date.getFullYear()}\') or (year =  \'${date.getFullYear()}\' and  (case semester when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)<(case (select semester from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1)   when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)))  order by course_id desc ;
+      with year_table as (select year as x from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1 ) 
+      SELECT * FROM  instructor natural join teaches,year_table WHERE id = \'${i_id}\' and ((year < year_table.x) or (year = year_table.x and  (case semester when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)<(case (select semester from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1)   when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)))  order by year desc,CASE 
+      WHEN semester = 'Spring' THEN 4
+      WHEN semester = 'Summer' THEN 3
+      WHEN semester = 'Fall' THEN 2
+      WHEN semester = 'Winter' THEN 1
+    END ;
       
       `);
       client.release();

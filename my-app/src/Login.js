@@ -36,7 +36,7 @@ const Login = ({handleLogin}) => {
   return (
     <div>
       <div class="justify-content-center align-items-sm-right text-light bg-dark">
-        <h1 class="font-monospace ">ASC</h1></div>
+       </div>
       <div class="d-flex flex-row  justify-content-center align-items-sm-around" id="login-div" >
       <div class="p-2">
         

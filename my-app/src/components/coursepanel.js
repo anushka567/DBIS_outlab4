@@ -19,6 +19,12 @@ const CoursePanel =({course_id})=> {
     const [showToast, setShowToast] = useState(false);
     const [message, setMessage] = useState("");
     
+
+    const [selected, setSelected] = useState("");
+
+    const handleChange = (e) => {
+      setSelected(e.target.value);
+    };
      
     async function  register_course(course_id,sec_id){
         //console.log(course_id)
@@ -37,7 +43,7 @@ const CoursePanel =({course_id})=> {
             setMessage(data.message);
             setShowToast(true);
             }else{
-              setMessage("what");
+              setMessage("error");
             setShowToast(true);
             }
            
@@ -85,7 +91,7 @@ const CoursePanel =({course_id})=> {
   
       <div>
          {valid ? (
-         <div>
+         <div >
           
 
     
@@ -93,11 +99,20 @@ const CoursePanel =({course_id})=> {
           {Object.keys(c_details).length ?  (
                  <ul>
                  {Object.values(c_details).map(item => (<li class="list-group-item">
-                  <div class="d-flex">
-                    <div>  {item.course_id}</div>
-                    <div>  {item.title}</div>
-                    <div> SECTION:{item.sec_id}  </div>
-                    <button onClick={()=> register_course(item.course_id,item.sec_id)}>Register</button>
+                  <div class="row ">
+                    <div  class="col-sm">  {item.course_id}</div>
+                    <div class="col-sm">  {item.title}</div>
+                    <div class="col-sm">
+                      <select value={selected} onChange={handleChange}>
+                         <option value="">Select</option>
+                        {item.sections.split(",").map((option) => (
+                           <option>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <button class="btn btn-primary " onClick={()=> register_course(item.course_id,selected)}>Register</button>
                   </div>
                  
                  {showToast && <Toast message={message} setShowToast={setShowToast} />}</li>))}

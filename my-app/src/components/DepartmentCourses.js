@@ -41,7 +41,7 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
-          <Table striped bordered hover variant="dark">
+          {/* <Table striped bordered hover variant="dark">
 <thead>
   <tr>
     <th class="text-center"><Link to="/home">Home</Link></th>
@@ -50,7 +50,7 @@ useEffect(()=>{
     
   </tr>
 </thead>
-</Table>
+</Table> */}
            <div class="justify-content-center align-items-sm-right text-light bg-dark">
         <h2 class="font-monospace "> List of courses running under {dept} department </h2></div>
 

@@ -28,7 +28,7 @@ const getStudentInfo = async (req, res) => {
       // let year=new Date().getFullYear();
       // year-=14
       let date = new Date();
-      date.setFullYear(date.getFullYear()-13)
+      // date.setFullYear(date.getFullYear()-13)
       let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
       console.log(timestamp);
 
@@ -56,12 +56,20 @@ const getStudentInfo = async (req, res) => {
       
 
       let date = new Date();
-      date.setFullYear(date.getFullYear()-13)
+      // date.setFullYear(date.getFullYear()-13)
       let timestamp = date.toISOString().replace('T', ' ').split('.')[0];
       //console.log(year)
       const client = await pool.connect();
       const result = await client.query(`
-      select takes.* from takes where ID=\'${id}\' and((year <\'${date.getFullYear()}\') or (year =  \'${date.getFullYear()}\' and  (case semester when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)<(case (select semester from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1)   when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)))  order by year desc ;
+      with year_table as (select year as x from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1 ) 
+      select takes.* from takes,year_table where ID=\'${id}\' and(( year < year_table.x) or (year =  year_table.x and  (case semester when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)<(case (select semester from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1)   when  'Winter' then 4 when 'Spring' then 1 when 'Summer' then 2 when 'Fall' then 3 end)))  order by year desc,
+      CASE 
+      WHEN semester = 'Spring' THEN 4
+      WHEN semester = 'Summer' THEN 3
+      WHEN semester = 'Fall' THEN 2
+      WHEN semester = 'Winter' THEN 1
+    END
+       ;
       `);
       client.release();
       //console.log(result.rows)
@@ -83,11 +91,12 @@ const getStudentInfo = async (req, res) => {
         
           //console.log(id,course_id)
           let year=new Date().getFullYear();
-          year-=13
+          // year-=13
           //console.log(year)
           const client = await pool.connect();
           const result = await client.query(`
-            delete from takes where  id = \'${id}\' and  takes.course_id=\'${course_id}\'and year= \'${year}\'
+          with year_table as (select year as x from reg_dates where start_time <=  \'${timestamp}\' order by start_time desc limit 1 ) 
+            delete from takes,year_table where  id = \'${id}\' and  takes.course_id=\'${course_id}\'and year= year_table.x
           `);
           client.release();
           //console.log(result.rows)

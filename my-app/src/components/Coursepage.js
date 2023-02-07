@@ -121,7 +121,7 @@ useEffect(()=>{
     <div>
       {valid ? (
         <div>
-<Table striped bordered hover variant="dark">
+{/* <Table striped bordered hover variant="dark">
 <thead>
   <tr>
     <th class="text-center"><Link to="/home">Home</Link></th>
@@ -130,7 +130,7 @@ useEffect(()=>{
     
   </tr>
 </thead>
-</Table>
+</Table> */}
           
       <Table striped bordered hover variant="dark">
       <thead>
