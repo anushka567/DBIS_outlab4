@@ -17,21 +17,33 @@ const Registration = () => {
       });
   }, []);
 
+  // const handleInputChange = (event) => {
+  //   setInputValue(event.target.value);
+  //   console.log(inputValue)
+  //   if(!inputValue){
+  //     setSuggestions([])
+  //   }
+  //   else{
+  //   setSuggestions(
+  //     courseIds.filter((courseId) =>
+  //       courseId.toLowerCase().includes(event.target.value.toLowerCase())
+  //     )
+  //   );
+  //   }
+  // };
   const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-    console.log(inputValue)
-    if(!inputValue){
-      setSuggestions([])
-    }
-    else{
-    setSuggestions(
-      courseIds.filter((courseId) =>
-        courseId.toLowerCase().includes(event.target.value.toLowerCase())
-      )
-    );
-    }
-  };
-
+    
+    setInputValue(() => {
+      
+      setSuggestions(
+            courseIds.filter((courseId) =>
+              courseId.toLowerCase().includes(event.target.value.toLowerCase())
+            )
+          );
+        return event.target.value
+    });
+    
+  }
   return (
 
     <div>

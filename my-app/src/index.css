@@ -5,12 +5,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: beige;
+  /* background-color: beige; */
 }
 
 #home-body{
   /* padding: 2vw 2vw 2vh 2vh; */
-  background-color: beige;
+  /* background-color: beige; */
   
 }
 #home-course,#cod-body{
