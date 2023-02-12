@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "express-session": "^1.17.3",
+    "react-autocomplete": "^1.8.1"
+  }
+}

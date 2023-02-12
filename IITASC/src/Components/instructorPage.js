@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {Card ,Row,Col,Table} from 'react-bootstrap';
 
 import { useParams ,Link } from 'react-router-dom';
-
+const book_logo=require('../Assets/book-logo.png')
+const faded_book_logo=require('../Assets/faded-book-logo.png')
 const InstructorPage = () => {
   const valid= sessionStorage.getItem('valid');  
   const  par  = useParams();
@@ -133,7 +134,7 @@ useEffect(()=>{
                         </Card.Title>
                         <Card.Text>{item.title}</Card.Text>
                         
-                        <Card.Img variant="top" src={process.env.PUBLIC_URL + '/book-logo.png'} />
+                        <Card.Img variant="top" src={book_logo} />
                         
                       </Card.Body>
                     </Card>
@@ -167,7 +168,7 @@ useEffect(()=>{
                         </Card.Title>
                         <Card.Text>{item.title}</Card.Text>
                         
-                        <Card.Img variant="top" src={process.env.PUBLIC_URL + '/faded-book-logo.png'} />
+                        <Card.Img variant="top" src={faded_book_logo} />
                         
                       </Card.Body>
                     </Card>

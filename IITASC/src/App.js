@@ -1,14 +1,13 @@
 import React, { useState} from 'react';
 import { BrowserRouter, Routes, Route,Link  } from "react-router-dom";
-import {Table} from 'react-bootstrap';
-import Login from './Login';
-import Home from './components/Home';
-import Dashboard from './components/Dashboard';
-import CoursePage from './components/Coursepage';
-import InstructorPage from './components/instructorPage';
-import Department from './components/CourseOfferingDepartment';
-import DeptAllCourses from './components/DepartmentCourses';
-import Registration from './components/registration';
+import Login from './Components/Login';
+import Home from './Components/Home';
+import Dashboard from './Components/Dashboard';
+import CoursePage from './Components/Coursepage';
+import InstructorPage from './Components/instructorPage';
+import Department from './Components/CourseOfferingDepartment';
+import DeptAllCourses from './Components/DepartmentCourses';
+import Registration from './Components/registration';
 
 const App = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
